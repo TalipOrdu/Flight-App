@@ -1,7 +1,16 @@
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Flights from "./pages/Flights";
+import Home from "./pages/Home";
+import Navbar from "./components/Navbar";
 
 export default function App() {
   return (
-    <div className="text-3xl text-teal-600">App</div>
-  )
+    <BrowserRouter>
+    <Navbar/>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/flights" element={<Flights />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
