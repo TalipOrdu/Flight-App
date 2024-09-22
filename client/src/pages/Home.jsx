@@ -8,9 +8,9 @@ export default function Home() {
 
   return (
     <div className="bg-gray-200 p-6">
-      <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="container mx-auto flex flex-col md:flex-row gap-6">
         {/* Book Your Flight Section */}
-        <div className="bg-white shadow-md rounded-lg p-6 md:col-span-2">
+        <div className="bg-white shadow-md rounded-lg p-6 md:w-4/5"> {/* Changed width to 4/5 (80%) */}
           <div className="flex justify-between items-center mb-6">
             <div className="flex items-center space-x-4">
               <img src="/plane.jpg" alt="Plane Logo" className="w-12 h-12" />
@@ -112,7 +112,7 @@ export default function Home() {
 
         {/* Car Rentals Section */}
         <div
-          className="relative bg-cover bg-center rounded-lg shadow-md p-6 md:col-span-1"
+          className="relative bg-cover bg-center rounded-lg shadow-md p-6 md:w-1/5"  // Changed width to 1/5 (20%)
           style={{ backgroundImage: 'url("./car.jpg")' }}
         >
           {/* Overlay for better text visibility */}
