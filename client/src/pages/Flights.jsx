@@ -36,7 +36,7 @@ export default function Flights() {
 
           <button
             onClick={toggleSearchFilters}
-            className="px-4 py-2 text-blue-600 flex items-center space-x-2"
+            className="relative px-4 py-2 text-blue-600 flex items-center space-x-2"
           >
             Edit Search
             <FaChevronDown className="ml-1 items-center justify-center w-4 h-4" />
@@ -70,10 +70,15 @@ export default function Flights() {
         </div>
       </div>
       {searchFiltersVisible && (
-        <div className="w-auto mt-2 p-4 bg-blue-100 rounded-lg shadow-md">
-          <p className="text-blue-600">
-            Search Filters here (like date, class, etc.)
-          </p>
+        <div className="absolute left-[40%] transform -translate-x-1/2 w-32 bg-blue-100 rounded-lg shadow-md">
+          <div className="space-y-2">
+            <button className="block w-full text-left px-2 py-1 hover:bg-blue-200">
+              Latest
+            </button>
+            <button className="block w-full text-left px-2 py-1 hover:bg-blue-200">
+              Oldest
+            </button>
+          </div>
         </div>
       )}
 
@@ -107,13 +112,23 @@ export default function Flights() {
           </div>
           {sortOptionsVisible && (
             <div className="w-36 p-2 ml-[70px] pb-0 bg-blue-100 rounded-lg shadow-md">
-              <ul className="space-y-2 text-blue-600">
-                <li>Low to High</li>
-                <li>High to Low</li>
-                <li>Shortest</li>
-                <li>Earliest</li>
-                <li>Latest</li>
-              </ul>
+              <div className="space-y-2 text-blue-600">
+                <button className="block w-full text-left px-2 py-1 hover:bg-blue-200">
+                  Low to High
+                </button>
+                <button className="block w-full text-left px-2 py-1 hover:bg-blue-200">
+                  High to Low
+                </button>
+                <button className="block w-full text-left px-2 py-1 hover:bg-blue-200">
+                  Shortest
+                </button>
+                <button className="block w-full text-left px-2 py-1 hover:bg-blue-200">
+                  Earliest
+                </button>
+                <button className="block w-full text-left px-2 py-1 hover:bg-blue-200">
+                  Latest
+                </button>
+              </div>
             </div>
           )}
         </div>
@@ -124,14 +139,15 @@ export default function Flights() {
           flightDuration="1h 32m"
           priceMain="$156"
           priceComfort="$204"
-          priceDeltaOne="$386"
+          priceDeltaOne=""
+          priceEconomy="$120"
         />
         <FlightCard
           airline="American Airlines"
           times="7:00 AM – 8:52 AM"
           flightDuration="1h 52m"
           priceMain="$182"
-          priceComfort="--"
+          priceComfort="$110"
           priceFirst="$400"
         />
         <FlightCard
@@ -140,7 +156,7 @@ export default function Flights() {
           flightDuration="1h 35m"
           priceMain="$225"
           priceComfort="$253"
-          priceDeltaOne="1 more option"
+          priceDeltaOne=""
         />
         <FlightCard
           airline="United Airlines"
@@ -149,6 +165,7 @@ export default function Flights() {
           priceMain="$183"
           priceComfort="$449"
           priceDeltaOne="$407"
+          priceEconomy="$120"
         />
       </div>
     </div>
@@ -167,30 +184,46 @@ function StarRating({ value, max }) {
 }
 function FlightCard({
   airline,
-
+  times,
+  flightDuration,
   priceMain,
   priceComfort,
   priceDeltaOne,
+  priceFirst,
+  priceEconomy,
 }) {
+  const renderPriceCard = (price, label) => (
+    <div
+      className={`text-center border rounded-md w-36 h-32 hover:bg-gray-200 p-4 ${
+        !price ? "bg-gray-200" : ""
+      }`}
+    >
+      <p className="font-bold text-lg mb-6">{price || "---"}</p>
+      <p className="text-gray-500">{label || "---"}</p>
+    </div>
+  );
+
   return (
-    <div className="flex p-4 bg-white rounded-lg shadow-md">
+    <div className="flex p-4 pt-0 bg-white rounded-lg shadow-md">
       {/* Left Section: Flight details */}
-      <div className="flex w-2/3 items-center space-x-4">
+      <div className="flex w-[55%] items-start pt-4 space-x-4">
         {/* Airline Logo */}
         <img
           src="italy.png"
           alt={`${airline} logo`}
-          className="h-10 w-10 object-contain rounded-full"
+          className="h-11 w-11 object-contain rounded-full shadow-md border"
         />
 
         {/* Flight Info */}
         <div className="grid grid-cols-3 gap-4">
           {/* Full width Flight Time */}
-          <h4 className="text-lg font-bold col-span-3">7:00 AM – 9:20 AM</h4>
+          <h4 className="text-xl font-semibold col-span-3 mt-2 ml-4">
+            {times}
+          </h4>
 
           {/* Column 1: Airline Name and Flight Details */}
           <div className="flex flex-col space-y-2 items-center justify-center p-4">
-            <p className="font-semibold">American Airlines</p>
+            <p className="font-semibold">{airline}</p>
             <button className="text-blue-600 flex items-center text-sm">
               Flight Details
               <FaChevronDown className="ml-1 items-center justify-center w-4 h-4" />
@@ -200,7 +233,7 @@ function FlightCard({
           {/* Column 2: Flight Status and Duration */}
           <div className="flex flex-col space-y-2 items-center justify-center p-4">
             <p className="font-semibold">Nonstop</p>
-            <p className="text-gray-500">1h 52m</p>
+            <p className="text-gray-500">{flightDuration}</p>
           </div>
 
           {/* Column 3: Route and Flight Code */}
@@ -212,20 +245,13 @@ function FlightCard({
       </div>
 
       {/* Right Section: Pricing options */}
-      <div className="flex w-1/3 items-center justify-between">
+      <div className="flex w-[45%] p-6 space-x-4 items-center justify-between">
         {/* Pricing columns */}
-        <div className="text-center">
-          <p className="font-semibold">{priceMain}</p>
-          <p className="text-gray-500">Main</p>
-        </div>
-        <div className="text-center">
-          <p className="font-semibold">{priceComfort}</p>
-          <p className="text-gray-500">Comfort+</p>
-        </div>
-        <div className="text-center">
-          <p className="font-semibold">{priceDeltaOne}</p>
-          <p className="text-gray-500">Delta One</p>
-        </div>
+        {renderPriceCard(priceMain, "Main")}
+        {renderPriceCard(priceComfort, "Comfort+")}
+        {renderPriceCard(priceDeltaOne, "Delta One")}
+        {renderPriceCard(priceFirst, "First")}
+        {renderPriceCard(priceEconomy, "Economy")}
       </div>
     </div>
   );
@@ -244,7 +270,9 @@ FlightCard.propTypes = {
   priceDeltaOne: PropTypes.string.isRequired,
   flightNumber: PropTypes.number.isRequired,
   flightRoute: PropTypes.string.isRequired,
-  airlineLogo: PropTypes.string.isRequired, // New prop for airline logo
+  airlineLogo: PropTypes.string.isRequired,
   departureTime: PropTypes.string.isRequired,
   arrivalTime: PropTypes.string.isRequired,
+  priceFirst: PropTypes.string.isRequired,
+  priceEconomy: PropTypes.string.isRequired,
 };
